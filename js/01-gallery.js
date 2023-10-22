@@ -27,8 +27,10 @@ const openImage = e => {
   e.preventDefault();
 
   const srcFullImage = e.target.dataset.source;
+
   const instance = basicLightbox.create(`<img src="${srcFullImage}">`);
   instance.show();
+
   const closeImage = ev => {
     if (ev.code === 'Escape') {
       instance.close();
@@ -36,6 +38,13 @@ const openImage = e => {
     }
   };
   window.addEventListener('keydown', closeImage);
+  instance.element().addEventListener('click', event => {
+    if (event.target.nodeName === 'IMG') {
+      return;
+    }
+    instance.close();
+    window.removeEventListener('keydown', closeImage);
+  });
 };
 
 list.addEventListener('click', openImage);
